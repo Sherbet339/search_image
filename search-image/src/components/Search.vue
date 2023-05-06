@@ -15,7 +15,10 @@
       </v-col>
     </v-row>
 
-    <v-row class="text-center mt-6">
+    <h4 v-if="noImage === true">
+      No images found from this keyword "{{ this.search }}"
+    </h4>
+    <v-row class="mt-6">
       <v-col md="3" sm="3" xs="2" v-for="(img, index) in images" :key="index">
         <v-dialog class="img-dialog" v-model="img.selected" width="auto">
           <template v-slot:activator="{ on, attrs }">
@@ -36,6 +39,14 @@
         </v-dialog>
       </v-col>
     </v-row>
+    <div class="load-btn mt-5">
+      <v-btn
+        v-if="displayAmount < allImage.length && noImage === false"
+        @click="loadMore()"
+      >
+        Load more
+      </v-btn>
+    </div>
   </v-container>
 </template>
 
@@ -44,13 +55,18 @@ export default {
   data() {
     return {
       search: null,
+      allImage: [],
       images: [],
       dialog: false,
+      displayAmount: null,
+      noImage: false,
     };
   },
   mounted() {},
   methods: {
     searchImage() {
+      this.displayAmount = 8;
+      this.images = [];
       console.log(this.search);
       let clientId = "wqLsrKsFmjHksm5ixxQdKmgyHrXuHfVtFL_AGxAuY1c";
       let url =
@@ -64,12 +80,33 @@ export default {
           return res.json();
         })
         .then((data) => {
-          console.log(data.results);
-          data.results.forEach((image) => {
-            this.images.push({ selected: false, image: image.urls.regular });
-          });
-          console.log(this.images);
+          if (data.total < 1) {
+            this.noImage = true;
+          } else {
+            this.noImage = false;
+            this.allImage = data.results;
+            for (let i = 0; i < this.displayAmount; i++) {
+              this.images.push({
+                selected: false,
+                image: data.results[i].urls.regular,
+              });
+            }
+            console.log(this.images);
+          }
         });
+    },
+    loadMore() {
+      this.images = [];
+      this.displayAmount += 4;
+      console.log(this.allImage);
+
+      for (let i = 0; i < this.displayAmount && i < this.allImage.length; i++) {
+        this.images.push({
+          selected: false,
+          image: this.allImage[i].urls.regular,
+        });
+      }
+      console.log(this.images);
     },
   },
 };
