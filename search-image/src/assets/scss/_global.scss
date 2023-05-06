@@ -1,0 +1,12 @@
+.v-main { 
+    background-color: rgb(221, 228, 228);
+    margin: 0 100px 0 100px;
+}
+
+.search-component {
+    h1, .v-text-field {
+        display: flex;
+        justify-content: center;
+        // align-items: center;
+    }
+}
