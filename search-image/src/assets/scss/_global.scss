@@ -1,12 +1,21 @@
-.v-main { 
+.v-main {
     background-color: rgb(221, 228, 228);
-    margin: 0 100px 0 100px;
+    // margin: 0 100px 0 100px;
 }
 
 .search-component {
-    h1, .v-text-field {
+    h1 {
         display: flex;
         justify-content: center;
-        // align-items: center;
+    }
+}
+
+
+
+
+.img-expand {
+    .close-btn {
+        display: flex;
+        justify-content: flex-end;
     }
 }
